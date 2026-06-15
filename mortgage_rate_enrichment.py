@@ -18,7 +18,7 @@ mortgage.groupby('year_month')['rate_30yr_fixed']
 .mean().reset_index()
 )
 
-# Create a matching year_monthy key on the MLS datasets 
+# Create a matching year_monthly key on the MLS datasets 
 # Sold Dataset - key off CloseDate
 sold['year_month'] = pd.to_datetime(sold['CloseDate']).dt.to_period('M')
 

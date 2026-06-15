@@ -50,7 +50,7 @@ def load_monthly_files(prefix):
         file_path = data_folder / f"{prefix}{yyyymm}.csv"
 
         if file_path.exists():
-            df = pd.read_csv(file_path)
+            df = pd.read_csv(file_path, low_memory=False)
 
             #Row count before concatenation for each monthly file
             print(f"{file_path.name}: {len(df)} rows")

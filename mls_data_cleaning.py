@@ -18,9 +18,7 @@ def clean_mls_data(df, dataset_name):
 
     before_rows = df.shape[0]
 
-    # -------------------------
     # Convert date columns
-    # -------------------------
     date_cols = [
         "CloseDate",
         "PurchaseContractDate",
@@ -50,7 +48,11 @@ def clean_mls_data(df, dataset_name):
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
 
-    
+    # Handle missing values
+    # Drop rows missing critical fields
+    critical_cols = ["ClosePrice", "LivingArea"]
+    df = df.dropna(subset=[col for col in critical_cols if col in df.columns])
+
     # Date consistency flags
     if "ListingContractDate" in df.columns and "CloseDate" in df.columns:
         df["listing_after_close_flag"] = df["ListingContractDate"] > df["CloseDate"]
@@ -67,9 +69,8 @@ def clean_mls_data(df, dataset_name):
     else:
         df["negative_timeline_flag"] = False
 
-    # -------------------------
+
     # Geographic data flags
-    # -------------------------
     if "Latitude" in df.columns and "Longitude" in df.columns:
         df["missing_coordinates_flag"] = df["Latitude"].isna() | df["Longitude"].isna()
         df["zero_coordinates_flag"] = (df["Latitude"] == 0) | (df["Longitude"] == 0)
